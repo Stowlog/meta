@@ -47,12 +47,14 @@ jobs:
 
   publish:
     needs: release-please
-    if: ${{ inputs.publish-npm && needs.release-please.outputs.releases_created == 'true' }}
+    if: ${{ inputs.publish-npm && (needs.release-please.outputs.releases_created == 'true' || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
       id-token: write
       contents: read
+    env:
+      TURBO_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
 
@@ -64,7 +66,7 @@ jobs:
 
       - name: Setup pnpm
         if: ${{ inputs.package-manager == 'pnpm' }}
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           run_install: false
 
