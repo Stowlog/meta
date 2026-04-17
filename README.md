@@ -1,6 +1,6 @@
 # meta
 
-EstudioCactus shared GitHub Actions workflows and configuration.
+Stowlog shared GitHub Actions workflows and configuration.
 
 ## Reusable Workflows
 
@@ -19,7 +19,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-standard.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-standard.yml@main
     secrets: inherit
     # with:
     #   target-branch: main          # default
@@ -48,7 +48,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-monorepo.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-monorepo.yml@main
     secrets: inherit
 ```
 
@@ -63,7 +63,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-monorepo.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-monorepo.yml@main
     secrets: inherit
     with:
       publish-npm: true

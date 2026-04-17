@@ -1,12 +1,12 @@
 # Release Please — Reusable Workflows Design
 
 **Date:** 2026-04-17  
-**Repo:** studiocactus/meta  
+**Repo:** stowlog/meta  
 **Status:** Approved
 
 ## Goal
 
-Standardize GitHub releases across all EstudioCactus/Stowlog repositories using reusable GitHub Actions workflows backed by `release-please`. Repos import only what they need — no copy-paste maintenance.
+Standardize GitHub releases across all Stowlog repositories using reusable GitHub Actions workflows backed by `release-please`. Repos import only what they need — no copy-paste maintenance.
 
 ## Context
 
@@ -17,7 +17,7 @@ Standardize GitHub releases across all EstudioCactus/Stowlog repositories using 
 
 ## Architecture
 
-Two reusable workflows live in `studiocactus/meta`:
+Two reusable workflows live in `stowlog/meta`:
 
 ```
 meta/
@@ -27,7 +27,7 @@ meta/
         └── release-please-monorepo.yml   ← monorepos (manifest-based)
 ```
 
-Consumed via `uses: studiocactus/meta/.github/workflows/<file>.yml@main` with `secrets: inherit`.
+Consumed via `uses: stowlog/meta/.github/workflows/<file>.yml@main` with `secrets: inherit`.
 
 ## Workflow: `release-please-standard.yml`
 
@@ -56,7 +56,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-standard.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-standard.yml@main
     secrets: inherit
 ```
 
@@ -95,7 +95,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-monorepo.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-monorepo.yml@main
     secrets: inherit
     with:
       publish-npm: true
@@ -110,7 +110,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-monorepo.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-monorepo.yml@main
     secrets: inherit
 ```
 

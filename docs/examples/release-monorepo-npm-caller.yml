@@ -13,7 +13,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-monorepo.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-monorepo.yml@main
     secrets: inherit
     with:
       publish-npm: true

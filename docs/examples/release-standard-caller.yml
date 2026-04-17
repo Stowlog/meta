@@ -10,7 +10,7 @@ on:
 
 jobs:
   release:
-    uses: studiocactus/meta/.github/workflows/release-please-standard.yml@main
+    uses: stowlog/meta/.github/workflows/release-please-standard.yml@main
     secrets: inherit
     # Optional overrides:
     # with:
