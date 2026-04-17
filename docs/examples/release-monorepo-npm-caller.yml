@@ -2,7 +2,7 @@
 # Requires in repo root:
 #   - release-please-config.json
 #   - .release-please-manifest.json
-# Requires repository secret: NPM_TOKEN
+# Requires: GitHub environment named 'npm' configured with npm OIDC (Trusted Publishers)
 
 name: Release
 

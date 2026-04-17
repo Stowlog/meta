@@ -70,7 +70,7 @@ jobs:
       package-manager: pnpm
 ```
 
-> Requires `NPM_TOKEN` secret in the repo.
+> Requires the `npm` GitHub environment configured with npm OIDC (Trusted Publishers). No secrets needed.
 
 ---
 
