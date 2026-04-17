@@ -19,6 +19,10 @@ on:
         description: Package manager to use for install and publish (npm or pnpm)
         type: string
         default: npm
+      build-command:
+        description: Command to run before publishing (e.g. 'pnpm build'). Skipped if empty.
+        type: string
+        default: ''
     secrets:
       RELEASE_PLEASE_TOKEN:
         description: GitHub token with write permissions (falls back to GITHUB_TOKEN)
@@ -84,6 +88,10 @@ jobs:
       - name: Install dependencies (npm)
         if: ${{ inputs.package-manager == 'npm' }}
         run: npm ci
+
+      - name: Build
+        if: ${{ inputs.build-command != '' }}
+        run: ${{ inputs.build-command }}
 
       - name: Publish packages (pnpm)
         if: ${{ inputs.package-manager == 'pnpm' }}

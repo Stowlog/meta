@@ -60,6 +60,7 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   release:
@@ -68,6 +69,7 @@ jobs:
     with:
       publish-npm: true
       package-manager: pnpm
+      build-command: 'pnpm build'
 ```
 
 > Requires the `npm` GitHub environment configured with npm OIDC (Trusted Publishers). No secrets needed.
@@ -92,6 +94,7 @@ jobs:
 | `publish-npm` | boolean | `false` | Publish packages to npm |
 | `node-version` | string | `20` | Node.js version for publish job |
 | `package-manager` | string | `npm` | `npm` or `pnpm` |
+| `build-command` | string | `''` | Command to run before publishing (e.g. `pnpm build`) |
 
 ---
 

@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   release:
@@ -19,3 +20,4 @@ jobs:
       publish-npm: true
       package-manager: pnpm # or npm
       node-version: '20'
+      build-command: 'pnpm build' # remove if no build step needed
