@@ -1,0 +1,36 @@
+name: Release Please (Standard)
+
+on:
+  workflow_call:
+    inputs:
+      target-branch:
+        description: Branch to track for releases
+        type: string
+        default: main
+      release-type:
+        description: release-please release type (node, simple, etc.)
+        type: string
+        default: node
+      changelog-types:
+        description: JSON array string of extra conventional commit types for changelog
+        type: string
+        default: ''
+    secrets:
+      RELEASE_PLEASE_TOKEN:
+        description: GitHub token with write permissions (falls back to GITHUB_TOKEN)
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          release-type: ${{ inputs.release-type }}
+          target-branch: ${{ inputs.target-branch }}
+          changelog-types: ${{ inputs.changelog-types }}
