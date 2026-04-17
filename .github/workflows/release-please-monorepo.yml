@@ -1,0 +1,104 @@
+name: Release Please (Monorepo)
+
+on:
+  workflow_call:
+    inputs:
+      target-branch:
+        description: Branch to track for releases
+        type: string
+        default: main
+      publish-npm:
+        description: Whether to publish packages to npm after a release
+        type: boolean
+        default: false
+      node-version:
+        description: Node.js version used during npm publish
+        type: string
+        default: '20'
+      package-manager:
+        description: Package manager to use for install and publish (npm or pnpm)
+        type: string
+        default: npm
+    secrets:
+      RELEASE_PLEASE_TOKEN:
+        description: GitHub token with write permissions (falls back to GITHUB_TOKEN)
+        required: false
+      NPM_TOKEN:
+        description: npm auth token — required when publish-npm is true
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          target-branch: ${{ inputs.target-branch }}
+
+  publish:
+    needs: release-please
+    if: ${{ inputs.publish-npm && needs.release-please.outputs.releases_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: https://registry.npmjs.org
+
+      - name: Setup pnpm
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store path
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        id: pnpm-cache
+        run: echo "path=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.path }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies (pnpm)
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        run: pnpm install --frozen-lockfile
+
+      - name: Install dependencies (npm)
+        if: ${{ inputs.package-manager == 'npm' }}
+        run: npm ci
+
+      - name: Publish packages (pnpm)
+        if: ${{ inputs.package-manager == 'pnpm' }}
+        run: pnpm publish -r --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish packages (npm)
+        if: ${{ inputs.package-manager == 'npm' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PATHS_RELEASED: ${{ needs.release-please.outputs.paths_released }}
+        run: |
+          echo "$PATHS_RELEASED" | jq -r '.[]' | while read pkg_path; do
+            echo "Publishing $pkg_path"
+            cd "$pkg_path"
+            npm publish --access public
+            cd -
+          done
