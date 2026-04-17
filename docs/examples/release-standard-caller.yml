@@ -1,0 +1,19 @@
+# Copy this file to .github/workflows/release.yml in your repo
+# Adjust 'with:' inputs as needed — all have sensible defaults
+
+name: Release
+
+on:
+  push:
+    branches:
+      - main # change to 'production' if needed
+
+jobs:
+  release:
+    uses: studiocactus/meta/.github/workflows/release-please-standard.yml@main
+    secrets: inherit
+    # Optional overrides:
+    # with:
+    #   target-branch: production
+    #   release-type: node
+    #   changelog-types: '[{"type":"chore","section":"Miscellaneous","hidden":false}]'

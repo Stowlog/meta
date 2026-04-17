@@ -1,0 +1,21 @@
+# Copy this to .github/workflows/release.yml in a monorepo that publishes to npm
+# Requires in repo root:
+#   - release-please-config.json
+#   - .release-please-manifest.json
+# Requires repository secret: NPM_TOKEN
+
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    uses: studiocactus/meta/.github/workflows/release-please-monorepo.yml@main
+    secrets: inherit
+    with:
+      publish-npm: true
+      package-manager: pnpm # or npm
+      node-version: '20'
