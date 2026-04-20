@@ -27,6 +27,13 @@ jobs:
     #   changelog-types: ''          # default (empty)
 ```
 
+> [!NOTE]
+> `RELEASE_PLEASE_TOKEN` is typically defined at the organization level. It must be explicitly declared in the reusable workflow to be accessible via `workflow_call`.
+
+| Secret | Description |
+|---|---|
+| `RELEASE_PLEASE_TOKEN` | GitHub token with write permissions (falls back to GITHUB_TOKEN) |
+
 ---
 
 ### `release-please-monorepo.yml` — Monorepos
@@ -72,13 +79,15 @@ jobs:
       build-command: 'pnpm build'
 ```
 
-> Requires the `npm` GitHub environment configured with npm OIDC (Trusted Publishers). No secrets needed.
+> Requires the `npm` GitHub environment configured with npm OIDC (Trusted Publishers).
 
 ---
 
-## Inputs Reference
+## Reference
 
 ### `release-please-standard.yml`
+
+#### Inputs
 
 | Input | Type | Default | Description |
 |---|---|---|---|
@@ -86,7 +95,15 @@ jobs:
 | `release-type` | string | `node` | release-please type |
 | `changelog-types` | string | `''` | JSON array of extra commit types |
 
+#### Secrets
+
+| Secret | Description |
+|---|---|
+| `RELEASE_PLEASE_TOKEN` | GitHub token with write permissions (falls back to GITHUB_TOKEN) |
+
 ### `release-please-monorepo.yml`
+
+#### Inputs
 
 | Input | Type | Default | Description |
 |---|---|---|---|
@@ -95,6 +112,12 @@ jobs:
 | `node-version` | string | `20` | Node.js version for publish job |
 | `package-manager` | string | `npm` | `npm` or `pnpm` |
 | `build-command` | string | `''` | Command to run before publishing (e.g. `pnpm build`) |
+
+#### Secrets
+
+| Secret | Description |
+|---|---|
+| `RELEASE_PLEASE_TOKEN` | GitHub token with write permissions (falls back to GITHUB_TOKEN) |
 
 ---
 
