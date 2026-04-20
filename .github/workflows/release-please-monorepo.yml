@@ -14,7 +14,7 @@ on:
       node-version:
         description: Node.js version used during npm publish
         type: string
-        default: "20"
+        default: "24"
       package-manager:
         description: Package manager to use for install and publish (npm or pnpm)
         type: string
@@ -50,10 +50,10 @@ jobs:
       - uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           target-branch: ${{ inputs.target-branch }}
-          config-file: ${{ inputs.config-file || 'release-please-config.json' }}
-          manifest-file: ${{ inputs.manifest-file || '.release-please-manifest.json' }}
+          config-file: ${{ inputs.config-file }}
+          manifest-file: ${{ inputs.manifest-file }}
 
   publish:
     needs: release-please
