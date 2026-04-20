@@ -23,6 +23,14 @@ on:
         description: Command to run before publishing (e.g. 'pnpm build'). Skipped if empty.
         type: string
         default: ''
+      config-file:
+        description: Path to release-please-config.json
+        type: string
+        default: 'release-please-config.json'
+      manifest-file:
+        description: Path to .release-please-manifest.json
+        type: string
+        default: '.release-please-manifest.json'
     secrets:
       RELEASE_PLEASE_TOKEN:
         description: GitHub token with write permissions (falls back to GITHUB_TOKEN)
@@ -44,6 +52,8 @@ jobs:
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           target-branch: ${{ inputs.target-branch }}
+          config-file: ${{ inputs.config-file }}
+          manifest-file: ${{ inputs.manifest-file }}
 
   publish:
     needs: release-please
