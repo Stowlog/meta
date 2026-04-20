@@ -14,7 +14,7 @@ on:
       node-version:
         description: Node.js version used during npm publish
         type: string
-        default: '20'
+        default: "20"
       package-manager:
         description: Package manager to use for install and publish (npm or pnpm)
         type: string
@@ -22,15 +22,15 @@ on:
       build-command:
         description: Command to run before publishing (e.g. 'pnpm build'). Skipped if empty.
         type: string
-        default: ''
+        default: ""
       config-file:
         description: Path to release-please-config.json
         type: string
-        default: 'release-please-config.json'
+        default: "release-please-config.json"
       manifest-file:
         description: Path to .release-please-manifest.json
         type: string
-        default: '.release-please-manifest.json'
+        default: ".release-please-manifest.json"
     secrets:
       RELEASE_PLEASE_TOKEN:
         description: GitHub token with write permissions (falls back to GITHUB_TOKEN)
@@ -52,8 +52,8 @@ jobs:
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           target-branch: ${{ inputs.target-branch }}
-          config-file: ${{ inputs.config-file }}
-          manifest-file: ${{ inputs.manifest-file }}
+          config-file: ${{ inputs.config-file || 'release-please-config.json' }}
+          manifest-file: ${{ inputs.manifest-file || '.release-please-manifest.json' }}
 
   publish:
     needs: release-please
